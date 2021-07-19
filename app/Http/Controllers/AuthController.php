@@ -73,99 +73,81 @@ class AuthController extends Controller
      * @return [string] token_type
      * @return [string] expires_at
      */
-    // public  function login(Request $request)
-    // {
-    //     $email = $request->get('email');
-    //     $password   = $request->get('password');
-
-
-
-    //     if(Auth::attempt(['email' => $email, 'password' => $password])) {
-
-    //         $user = Auth::user();
-    //         $token = $user->createToken('MyApp')->accessToken;
-
-    //         return response()->json([
-    //             'token' => $token
-    //         ]);
-
-    //     }
-    //     else {
-    //         return response()->json([
-    //            'msg' => 'Unauthorized access'
-    //         ]);
-    //     }
-    // }
-
-
-    public function login(Request $request)
+    public  function login(Request $request)
     {
-        $data = $request->validate([
-            'email' => 'email|required',
-            'password' => 'required'
-        ]);
+        $email = $request->get('email');
+        $password   = $request->get('password');
 
-        if (!auth()->attempt($data)) {
-            return response(['error_message' => 'Incorrect Details. 
-            Please try again']);
+
+
+        if(Auth::attempt(['email' => $email, 'password' => $password])) {
+
+            $user = Auth::user();
+            $token = $user->createToken('MyApp')->accessToken;
+
+            return response()->json([
+                'user' => auth()->user(),
+                'token' => $token
+            ]);
+
         }
-
-        $token = auth()->user()->createToken('API Token')->accessToken;
-
-        return response(['user' => auth()->user(), 'token' => $token]);
-
+        else {
+            return response()->json([
+               'msg' => 'Unauthorized access'
+            ]);
+        }
     }
+
+
+    // public function login(Request $request)
+    // {
+    //     $data = $request->validate([
+    //         'email' => 'email|required',
+    //         'password' => 'required'
+    //     ]);
+
+    //     if (!auth()->attempt($data)) {
+    //         return response(['error_message' => 'Incorrect Details. 
+    //         Please try again']);
+    //     }
+
+    //     $token = auth()->user()->createToken('API Token')->accessToken;
+
+    //     return response(['user' => auth()->user(), 'token' => $token]);
+
+    // }
 
     /**
      * Logout user (Revoke the token)
      *
      * @return [string] message
      */
-    // public function logout(Request $request)
-    // {
-    //     $request->user()->token()->revoke();
-    //     return response()->json([
-    //         'message' => 'Successfully logged out'
-    //     ]);
-    //  }
-
-    // public function logout(Request $request)
-    // {  
-	// $result = $request->user()->token()->revoke();                  
-    //         if($result){
-    //                 $response = response()->json(['error'=>false,'message'=>'User logout successfully.','result'=>[]],200);
-    //           }else{
-    //                 $response = response()->json(['error'=>true,'message'=>'Something is wrong.','result'=>[]],400);            
-    //           }   
-    //         return $response;       
-    // }
-//     public function logout()
-//     { 
-//     if (Auth::check()) {
-//        Auth::user()->AauthAcessToken()->delete();
-//     }
-// }
-
-public function logout(Request $request) {
-    if ($request->user()) { 
-        $request->user()->tokens()->delete();
-        //return response()->json(['message' => 'user is logged out'], 200);
-    }else{
-         return response()->json(['message' => 'user is not logged out'], 200);
+    public function logout(Request $request)
+    {
+        $user = User::whereEmail($request->email)->first();
+        $user->token()->revoke();
+        // $request->user()->token()->revoke();
+        return response()->json([
+            'message' => 'Successfully logged out'
+        ]);
     }
 
-    return response()->json(['message' => 'user is logged out'], 200);
-}
+    // public function logout (Request $request) {
+    //     $accessToken = auth()->user()->token();
+    //     $token= $request->user()->tokens->find($accessToken);
+    //     $token->revoke();
+    //     return response(['message' => 'You have been successfully logged out.'], 200);
+    //     }
+  
     /**
      * Get the authenticated User
      *
      * @return [json] user object
      */
-    // public function user(Request $request)
-    // {
-    //     return response()->json($request->user());
-    // }
-
+    public function user(Request $request)
+    {
+        return response()->json($request->user());
+    }
 
 
     // /**
@@ -229,10 +211,13 @@ public function logout(Request $request) {
     //  * @param  int  $id
     //  * @return \Illuminate\Http\Response
     //  */
-    // public function update(Request $request, $id)
-    // {
-    //     //
-    // }
+    public function update(Request $request, $id)
+    {
+       
+        $user=User::find($id);
+        $user->update($request->all());
+        return $user;
+    }
 
     // /**
     //  * Remove the specified resource from storage.

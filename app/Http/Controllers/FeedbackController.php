@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Model\User;
+use App\Models\Feedback;
+use App\Models\User;
 
-class CustomerController extends Controller
+class FeedbackController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,9 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+          //
+          $feedbacks=Feedback::join('users','users.id','=','feedback.user_id')->get(['feedback.id','feedback.rate','feedback.comment','feedback.category_name','feedback.user_id','users.firstname','users.lastname']);
+          return $feedbacks;
     }
 
     /**
@@ -35,7 +38,15 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $feedbacks=Feedback::create([
+            'rate'=>$request->input('rate'),
+            'user_id'=>$request->input('user_Id'),
+            'comment'=>$request->input('comment'),
+            'category_name'=>$request->input('category_name')
+
+        ]);
+        // $categories->save();
+        return $feedbacks;
     }
 
     /**
@@ -69,10 +80,7 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-       
-        $user=User::find($id);
-        $user->update($request->all());
-        return User::all();
+        //
     }
 
     /**
