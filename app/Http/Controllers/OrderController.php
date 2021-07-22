@@ -3,23 +3,29 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Category;
+use App\Models\Order;
+use Carbon\Carbon;
 
-class CategoryController extends Controller
+class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-
-     //SELECT * FROM categories
     public function index()
     {
-        $categories=Category::all();
-        return $categories;
+        $orders=Order::all();
+        return $orders;
     }
 
+    //return orders by customer id :
+    public function getbyCustomerId($customer_id)
+    {
+        $orders = Order::where('customer_id', '=', $customer_id)->get();
+        return $orders;
+    }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -31,7 +37,6 @@ class CategoryController extends Controller
         //
     }
 
-
     /**
      * Store a newly created resource in storage.
      *
@@ -40,14 +45,18 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        // $categories=new Category();
-        // $categories->name=$request->input('name');
-        
-        //or
-        $categories=Category::create([
-            'name'=>$request->input('name')
+          $date=Carbon::parse( $request->input('date'))->format('Y-m-d H:i:s');
+          $orders=Order::create([       
+            'date'=>$date,
+            'customer_name'=>$request->input('customer_name'),
+            'customer_id'=>$request->input('customer_id'),
+            'street'=>$request->input('street'),
+            'city'=>$request->input('city'),
+            'building'=>$request->input('building'),
+            'floor'=>$request->input('floor'),
+            'total_price'=>$request->input('total_price')
         ]);
-        return $categories;
+        return $orders;
     }
 
     /**
@@ -59,9 +68,6 @@ class CategoryController extends Controller
     public function show($id)
     {
         //
-        $categories=Category::find($id);
-        return $categories;
-
     }
 
     /**
@@ -72,8 +78,7 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $categories=Category::find($id)->first();
-        return $categories;
+        //
     }
 
     /**
@@ -85,16 +90,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // $categories=Category::where('id',$id)
-        // ->update([
-        //     'name'=>$request->input('name')
-        // ]);
-
-        // return $categories;
-
-        $categories=Category::find($id);
-        $categories->update($request->all());
-        return Category::all();
+        //
     }
 
     /**
@@ -105,10 +101,6 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $categories=Category::find($id);
-        $categories->delete();
-        return $categories;
+        //
     }
-
-
 }

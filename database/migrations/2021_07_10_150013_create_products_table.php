@@ -37,6 +37,10 @@ class CreateProductsTable extends Migration
         });
     }
 
+    //var p1=p1
+    //var stock=[p1.S,M,L,XL,XXL];
+    
+
     /**
      * Reverse the migrations.
      *

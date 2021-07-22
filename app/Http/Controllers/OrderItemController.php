@@ -3,23 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Category;
+use App\Models\OrderItem;
+use DB;
 
-class CategoryController extends Controller
+class OrderItemController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-
-     //SELECT * FROM categories
     public function index()
     {
-        $categories=Category::all();
-        return $categories;
+       //
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -31,7 +28,6 @@ class CategoryController extends Controller
         //
     }
 
-
     /**
      * Store a newly created resource in storage.
      *
@@ -40,14 +36,12 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        // $categories=new Category();
-        // $categories->name=$request->input('name');
-        
-        //or
-        $categories=Category::create([
-            'name'=>$request->input('name')
+        $orderitems=OrderItem::create([
+            'order_id'=>$request->input('order_id'),
+            'product_id'=>$request->input('product_id'),
+            'size'=>$request->input('size'),
         ]);
-        return $categories;
+        return $orderitems;
     }
 
     /**
@@ -58,10 +52,13 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        //
-        $categories=Category::find($id);
-        return $categories;
-
+        $orderitems=DB::table('orderitems')
+        // ->join('orders','orders.id','=','orderitems.order_id')
+        ->join('products','products.id','=','orderitems.product_id')
+        ->select(['orderitems.product_id','products.title','products.price','products.image','orderitems.order_id','orderitems.size'])
+        ->where('orderitems.order_id', $id)
+        ->get();
+         return $orderitems;
     }
 
     /**
@@ -72,8 +69,7 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $categories=Category::find($id)->first();
-        return $categories;
+        //
     }
 
     /**
@@ -85,16 +81,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // $categories=Category::where('id',$id)
-        // ->update([
-        //     'name'=>$request->input('name')
-        // ]);
-
-        // return $categories;
-
-        $categories=Category::find($id);
-        $categories->update($request->all());
-        return Category::all();
+        //
     }
 
     /**
@@ -105,10 +92,6 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $categories=Category::find($id);
-        $categories->delete();
-        return $categories;
+        //
     }
-
-
 }

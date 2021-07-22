@@ -19,9 +19,6 @@ class ProductController extends Controller
     {
         //
         $products=Products::join('categories','categories.id','=','products.category_id')->get(['products.id','products.title','products.color','products.description','products.collection','products.price','products.image','products.S','products.M','products.L','products.XL','products.XXL','categories.name']);
-        // return $data;
-
-        // $products=Products::all();
         return $products;
     }
 
@@ -53,8 +50,6 @@ class ProductController extends Controller
                     $newP = $categ->id;            
                 }      
                };
-            
-            // $categories=Category::find(1);
             $products = new Products();
             $products->title = $request->input('title');
             $products->category_id=$newP;

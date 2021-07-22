@@ -22,27 +22,6 @@ class AuthController extends Controller
      * @param  [string] password_confirmation
      * @return [string] message
      */
-    // public function signup(Request $request)
-    // {
-    //     $request->validate([
-    //         'firstname' => 'required|string',
-    //         'lastname' => 'required|string',
-    //         'email' => 'required|string|email|unique:users',
-    //         'phoneNb' => 'required|integer|phone',
-    //         'password' => 'required|string|confirmed'
-    //     ]);
-    //     $user = new User([
-    //         'firstname' => $request->firstname,
-    //         'lastname' => $request->lastname,
-    //         'phoneNb' => $request->phoneNb,
-    //         'email' => $request->email,
-    //         'password' => bcrypt($request->password)
-    //     ]);
-    //     $user->save();
-    //     return response()->json([
-    //         'message' => 'Successfully created user!'
-    //     ], 201);
-    // }
 
     public function register(Request $request)
     {
@@ -78,8 +57,6 @@ class AuthController extends Controller
         $email = $request->get('email');
         $password   = $request->get('password');
 
-
-
         if(Auth::attempt(['email' => $email, 'password' => $password])) {
 
             $user = Auth::user();
@@ -99,24 +76,6 @@ class AuthController extends Controller
     }
 
 
-    // public function login(Request $request)
-    // {
-    //     $data = $request->validate([
-    //         'email' => 'email|required',
-    //         'password' => 'required'
-    //     ]);
-
-    //     if (!auth()->attempt($data)) {
-    //         return response(['error_message' => 'Incorrect Details. 
-    //         Please try again']);
-    //     }
-
-    //     $token = auth()->user()->createToken('API Token')->accessToken;
-
-    //     return response(['user' => auth()->user(), 'token' => $token]);
-
-    // }
-
     /**
      * Logout user (Revoke the token)
      *
@@ -124,21 +83,12 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        $user = User::whereEmail($request->email)->first();
-        $user->token()->revoke();
-        // $request->user()->token()->revoke();
+        $request->user()->token()->revoke();
         return response()->json([
             'message' => 'Successfully logged out'
         ]);
     }
 
-    // public function logout (Request $request) {
-    //     $accessToken = auth()->user()->token();
-    //     $token= $request->user()->tokens->find($accessToken);
-    //     $token->revoke();
-    //     return response(['message' => 'You have been successfully logged out.'], 200);
-    //     }
-  
     /**
      * Get the authenticated User
      *

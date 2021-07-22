@@ -6,6 +6,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderItemController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -17,44 +19,19 @@ use App\Http\Controllers\FeedbackController;
 |
 */
 
-// Route::group([
-//     'prefix' => 'auth'
-// ], function () {
-//     // Route::post('login', 'AuthController@login');
-//     // Route::post('register', 'AuthController@register');
-  
-//     Route::group([
-//       'middleware' => 'auth:api'
-//     ], function() {
-//         Route::get('logout', [AuthController::class, 'logout']);
-//         // Route::get('user', 'AuthController@user');
-//     });
-// });
-// Route::post('logout', [AuthController::class, 'logout']);
 
-// Route::middleware('auth:api')->group(function (){
-//     Route::get('/user', function (Request $request) {
-//         return $request->user();
-//     });
-//     Route::get('logout', [
-//         AuthController::class, 'logout'
-//     ]);
-// });
-
-//Route::post('logout','AuthController@logout');
-
-
-
-Route::group([
-    'middleware' => 'auth:api'
-  ], function() {
-      Route::post('logout', [AuthController::class, 'logout']);
-      // Route::get('user', 'AuthController@user');
-  });
-
-
+//Authentication
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::middleware('auth:api')->group(function (){
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+    Route::post('logout', [
+        AuthController::class, 'logout'
+    ]);
+});
+
 
 //get users api
 Route::resource('users',AuthController::class);
@@ -62,29 +39,30 @@ Route::resource('users',AuthController::class);
 // feedbacks api
 Route::resource('feedbacks',FeedbackController::class);
 
-
-
-Route::resource('categor',categController::class);
-
-
-//call the method index in class categController by api named products
-
-//get  Users API:
-
 //for search 
 Route::get('/categ/search/{name}',[categController::class,'search']);
 
 //to get all categories:
 Route::resource('/categories',CategoryController::class);
+//or
+Route::resource('categor',categController::class);
+
+//get All products 
 Route::resource('/products',ProductController::class);
-// Route::put('/productsEdit/{categoryName}',[ProductController::class,'update']);
+
+//update orders with a new category
 Route::put('/productsEdit/{categoryName}',[ProductController::class,'update2']);
 
-// Route::put('/productsEdit',[ProductController::class,'update2']);
+//get orders
+Route::resource('/orders',OrderController::class);
 
+//get orders by customerId
+Route::get('ordersbyCustomer/{id}', [OrderController::class, 'getbyCustomerId']);
 
-// Route::post('/categ',[categController::class,'store']);
+//get ordersitems
+Route::resource('/orderitems',OrderItemController::class);
 
+//middleware
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     //   Route::get('logout', [AuthController::class, 'logout']);
     return $request->user();

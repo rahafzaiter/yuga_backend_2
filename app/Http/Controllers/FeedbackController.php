@@ -16,7 +16,7 @@ class FeedbackController extends Controller
     public function index()
     {
           //
-          $feedbacks=Feedback::join('users','users.id','=','feedback.user_id')->get(['feedback.id','feedback.rate','feedback.comment','feedback.category_name','feedback.user_id','users.firstname','users.lastname']);
+          $feedbacks=Feedback::join('users','users.id','=','feedbacks.user_id')->get(['feedbacks.id','feedbacks.rate','feedbacks.comment','feedbacks.category_name','feedbacks.user_id','users.id','users.firstname','users.lastname']);
           return $feedbacks;
     }
 
@@ -45,7 +45,6 @@ class FeedbackController extends Controller
             'category_name'=>$request->input('category_name')
 
         ]);
-        // $categories->save();
         return $feedbacks;
     }
 
