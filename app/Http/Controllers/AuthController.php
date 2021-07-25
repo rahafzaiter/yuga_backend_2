@@ -25,6 +25,20 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+
+        $email = $request->get('email');
+
+        $user=null;
+        $user = User::where('email', '=', $email)->first();
+
+        if($user!=null) {
+
+            return response()->json([
+                'msg' => 'Email is already used, please try another email'
+             ]);
+        }
+        else{
+
         $data = $request->validate([
             'firstname' => 'required|max:255',
             'lastname' => 'required|max:255',
@@ -40,6 +54,7 @@ class AuthController extends Controller
         $token = $user->createToken('API Token')->accessToken;
 
         return response([ 'user' => $user, 'token' => $token]);
+    }    
     }
 
     /**
@@ -55,7 +70,7 @@ class AuthController extends Controller
     public  function login(Request $request)
     {
         $email = $request->get('email');
-        $password   = $request->get('password');
+        $password = $request->get('password');
 
         if(Auth::attempt(['email' => $email, 'password' => $password])) {
 
