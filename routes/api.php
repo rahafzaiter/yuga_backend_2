@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderItemController;
+use App\Http\Controllers\StockController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -50,6 +51,9 @@ Route::resource('categor',categController::class);
 //get All products 
 Route::resource('/products',ProductController::class);
 
+//count number of products 
+Route::get('/countProducts',[ProductController::class,'getCount']);
+
 //update orders with a new category
 Route::put('/productsEdit/{categoryName}',[ProductController::class,'update2']);
 
@@ -61,6 +65,14 @@ Route::get('ordersbyCustomer/{id}', [OrderController::class, 'getbyCustomerId'])
 
 //get ordersitems
 Route::resource('/orderitems',OrderItemController::class);
+
+//get stocks
+Route::resource('/stocks',StockController::class);
+
+
+//return selected stock : SelectedStock
+//Route::put('selectedStock/{product_id}/{size}', [StockController::class, 'SelectedStock']);
+Route::put('selectedStock/', [StockController::class, 'SelectedStock']);
 
 //middleware
 Route::middleware('auth:api')->get('/user', function (Request $request) {

@@ -67,6 +67,16 @@ class ProductController extends Controller
             return response()->json($request);   
     }
 
+    public function getCount()
+    {
+       
+        $productss=Products::all();
+        $products =$productss->last();
+        return $products->id;
+
+    }
+
+
     /**
      * Display the specified resource.
      *
@@ -84,6 +94,7 @@ class ProductController extends Controller
         return $newproduct;
     }
 
+   
     /**
      * Show the form for editing the specified resource.
      *
@@ -106,57 +117,11 @@ class ProductController extends Controller
 
     public function update2(Request $request, $categoryName)
     {
-        $category = Category::where('name', '=', $categoryName)->first();
-        
+        $category = Category::where('name', '=', $categoryName)->first();   
         $product = Products::find($request['id']);
         $request['category_id'] = $category['id'];
-
-        // $request['title']=$product['title'];
-        // $request['description']=$product['description'];
-        // $request['color']=$product['color'];
-        // $request['collection']=$product['collection'];
-        // $request['price']=$product['price'];
-        // $request['image']=$product['image'];
-        // $request['S']=$product['S'];
-        // $request['M']=$product['M'];
-        // $request['L']=$product['L'];
-        // $request['XL']=$product['XL'];
-        // $request['XXL']=$product['XXL'];
-     
-        // return $request;
-
-
         $product->update($request->all());
-        // $product->category_id=request('category_id');
-        // $product->title=request('title');
-
         $product->save();
-        /*$products = Products::find(9);
-        $newP=0;
-        $categ_name=new Category();   
-        $categ_name->name = $request->input('category');
-        $all_categories=Category::all();
-
-        foreach ($all_categories as $key => $categ) {
-                if ($categ->name ==  $categ_name->name) {
-                    $newP = $categ->id;            
-                }};
-       
-            // $products->category_id=$newP;       
-            // // $products->title = $request->input('title');
-            // // $products->category_id=$newP;
-            // // $products->description = $request->input('description');
-            // // $products->color = $request->input('color');
-            // // $products->collection =  $request->input('collection');
-            // // $products->price =  $request->input('price');
-            // // $products->image =  $request->input('image');
-            // // $products->S =  $request->input('S');
-            // // $products->M =  $request->input('M');
-            // // $products->L =  $request->input('L');
-            // // $products->XL =  $request->input('XL');
-            // // $products->XXL =  $request->input('XXL');
-            // // // $products->update($request->all());
-            // // $products->save();*/
            
             return response()->json([
                 'message'=>'Succesfully updated product',
@@ -219,11 +184,6 @@ class ProductController extends Controller
             // // // $products->update($request->all());
             // // $products->save();*/
             return $product;
-           
-            // return response()->json([
-            //     'message'=>'Succesfully updated product',
-            //     'product'=>$product
-            // ],201);
     }
 
     /**

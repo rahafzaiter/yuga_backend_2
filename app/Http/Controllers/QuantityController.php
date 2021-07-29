@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Order;
-use Carbon\Carbon;
+use App\Models\Quantity;
+use App\Models\Products;
 
-
-class OrderController extends Controller
+class QuantityController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,17 +15,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders=Order::all();
-        return $orders;
+        //
     }
-
-    //return orders by customer id :
-    public function getbyCustomerId($customer_id)
-    {
-        $orders = Order::where('customer_id', '=', $customer_id)->get();
-        return $orders;
-    }
-    
 
     /**
      * Show the form for creating a new resource.
@@ -46,18 +36,7 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-          $date=Carbon::parse( $request->input('date'))->format('Y-m-d H:i:s');
-          $orders=Order::create([       
-            'date'=>$date,
-            'customer_name'=>$request->input('customer_name'),
-            'customer_id'=>$request->input('customer_id'),
-            'street'=>$request->input('street'),
-            'city'=>$request->input('city'),
-            'building'=>$request->input('building'),
-            'floor'=>$request->input('floor'),
-            'total_price'=>$request->input('total_price')
-        ]);
-        return $orders;
+        //
     }
 
     /**

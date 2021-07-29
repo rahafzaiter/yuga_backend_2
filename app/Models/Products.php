@@ -12,14 +12,18 @@ class Products extends Model
     protected $primaryKey='id';
     protected $fillable=['title','category_id','description','color','collection','price','image','S','M','L','XL','XXL'];
 
-
-    // public function category()
-    // {
-    //     return $this->hasOne('App\Category');
-    // }
-
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function quantity()
+    {
+        return $this->hasMany(Quantity::class);
+    }
+
+    public function stock()
+    {
+        return $this->hasMany(Stock::class);
     }
 }
