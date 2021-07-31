@@ -79,6 +79,7 @@ class StockController extends Controller
         return $stocks;
     }
 
+
     
     /**
      * Show the form for editing the specified resource.
@@ -100,7 +101,10 @@ class StockController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        $stocks=Stock::find($id);
+        $stocks->update($request->all());
+        return $stocks;
     }
 
     /**
@@ -110,7 +114,9 @@ class StockController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-        //
+    {   
+        DB::delete('delete from stocks where product_id = ?',[$id]);
+        return 'done';
+         
     }
 }
